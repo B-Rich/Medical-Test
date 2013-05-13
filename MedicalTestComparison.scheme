@@ -1,0 +1,126 @@
+;John Costantino
+;Method returns a list of elements that
+;contains the four probabilities and a 
+;print statement of the which is test is 
+;better.
+(define (med_test Pat_Info)
+  	
+	
+	;returns the sum of all positive patients
+	;that used test one.
+	(define (sumTestOnePos L) 
+ 		(cond ((null? L) 0) 
+ 	    	((= (caddar L) 1) 
+ 	  		(+ 1 (sumTestOnePos (cdr L)))) 
+ 	  	(else 
+	   		(sumTestOnePos (cdr L)))))
+	
+
+
+	;returns the sum of all positive patients
+	;that used test two.
+	(define (sumTestTwoPos L) 
+	 	(cond ((null? L) 0) 
+ 	    	((= (car (cdddar L)) 1) 
+ 	  		(+ 1 (sumTestTwoPos (cdr L)))) 
+ 		  (else 
+	   		(sumTestTwoPos(cdr L)))))
+
+
+	;returns the sum of all positives of test one
+	;that are also diseased
+	(define (diseasedPosOne L) 
+	 	(cond ((null? L) 0) 
+ 	    	((and (= (cadar L) 1) (= (caddar L) 1))
+ 	  		(+ 1 (diseasedPosOne (cdr L)))) 
+ 		  (else 
+	   		(diseasedPosOne (cdr L)))))
+	
+
+
+	;returns the sum of all positives of test two
+	;that are also diseased
+	(define (diseasedPosTwo L) 
+	 	(cond ((null? L) 0) 
+ 		((and (= (cadar L) 1) (= (car (cdddar L)) 1))
+ 	  		(+ 1 (diseasedPosTwo (cdr L)))) 
+ 		  (else 
+	   		(diseasedPosTwo (cdr L)))))
+	
+
+
+	;Returns the sum of all negatives on test one
+	(define (sumNegOne L) 
+ 		(cond ((null? L) 0) 
+ 	    	((= (caddar L) 0) 
+ 	  		(+ 1 (sumNegOne (cdr L)))) 
+	 	  (else 
+   			(sumNegOne (cdr L)))))
+	
+
+
+	;Returns the sum of all negatives on test one
+	(define (sumNegTwo L) 
+ 		(cond ((null? L) 0) 
+ 	   	((= (car (cdddar L)) 0) 
+ 	  	(+ 1 (sumNegTwo (cdr L)))) 
+	 	  (else 
+   			(sumNegTwo (cdr L)))))
+	
+	
+	;Returns the sum of all the people that arent 
+	;diseased and tested negative on test one.
+	(define (noDiseaseNegOne L) 
+ 		(cond ((null? L) 0) 
+ 	    	((and (= (cadar L) 0) (= (caddar L) 0))
+ 	  		(+ 1 (noDiseaseNegOne (cdr L)))) 
+ 	  	(else 
+   			(noDiseaseNegOne (cdr L)))))
+	
+
+
+	
+	
+	;Returns the sum of all the people that arent 
+	;diseased and tested negative on test two.
+	(define (noDiseaseNegTwo L) 
+ 		(cond ((null? L) 0) 
+ 	    	((and (= (cadar L) 0) (= (car (cdddar L)) 0))
+ 	  		(+ 1 (noDiseaseNegTwo (cdr L)))) 
+ 	  	(else 
+   			(noDiseaseNegTwo (cdr L)))))
+	
+
+
+(cons (/ (diseasedPosOne Pat_Info) (sumTestOnePos Pat_Info)) 
+(cons (/ (diseasedPosTwo Pat_Info) (sumTestTwoPos Pat_Info)) 
+(cons (/ (noDiseaseNegOne Pat_Info) (sumNegOne Pat_Info)) 
+(cons (/ (noDiseaseNegTwo Pat_Info) (sumNegTwo Pat_Info))
+
+
+; Determine which test is better
+(cons (cond ((and (> 
+			(/ (diseasedPosOne Pat_Info) 
+		   	   (sumTestOnePos Pat_Info))
+			(/ (diseasedPosTwo Pat_Info) 
+			   (sumTestTwoPos Pat_Info)))
+
+				
+		  (> 
+			(/ (noDiseaseNegOne Pat_Info)
+                           (sumNegOne Pat_Info))
+			(/ (noDiseaseNegTwo Pat_Info)
+                           (sumNegTwo Pat_Info))))
+	     'test1)		
+	    ((and (>
+			(/ (diseasedPosTwo Pat_Info) 
+                           (sumTestTwoPos Pat_Info))
+			(/ (diseasedPosOne Pat_Info)
+                           (sumTestOnePos Pat_Info)))
+		 (>
+			(/ (noDiseaseNegTwo Pat_Info)
+                           (sumNegTwo Pat_Info))
+			(/ (noDiseaseNegOne Pat_Info)
+                           (sumNegOne Pat_Info))))
+		'test2)
+	(else 'neither)) '()))))))
